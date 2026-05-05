@@ -20,4 +20,5 @@ public class Transacao {
     private TipoTransacao tipo;
     private Categoria categoria;
     private String observacao;
+    private Long usuarioId;
 }

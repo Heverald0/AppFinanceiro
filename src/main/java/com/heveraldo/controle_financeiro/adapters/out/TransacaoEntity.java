@@ -1,50 +1,37 @@
 package com.heveraldo.controle_financeiro.adapters.out;
 
-import com.heveraldo.controle_financeiro.core.model.Categoria;
-import com.heveraldo.controle_financeiro.core.model.TipoTransacao; 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "transacoes")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-
-@SQLDelete(sql = "UPDATE transacoes SET deletado = true WHERE id = ?")
-@SQLRestriction("deletado = false")
 public class TransacaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String descricao;
-
-    @Column(nullable = false)
     private BigDecimal valor;
-
-    @Column(nullable = false)
     private LocalDate data;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Categoria categoria;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TipoTransacao tipo;
-
-    @Builder.Default
-    private boolean deletado = false;
-
+    private String categoria;
+    private String tipo;
     private String observacao;
+
+    @Column(columnDefinition = "BIT(1) DEFAULT 0")
+    private boolean deletado;
+
+    // Vínculo com o usuário (Chave Estrangeira usuario_id)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UsuarioEntity usuario;
 }
