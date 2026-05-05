@@ -1,6 +1,7 @@
 package com.heveraldo.controle_financeiro.adapters.in.controller;
 
 import com.heveraldo.controle_financeiro.adapters.in.dto.request.TransacaoRequestDTO;
+import com.heveraldo.controle_financeiro.adapters.in.dto.response.ResumoResponseDTO;
 import com.heveraldo.controle_financeiro.adapters.in.dto.response.TransacaoResponseDTO;
 import com.heveraldo.controle_financeiro.core.model.Transacao;
 import com.heveraldo.controle_financeiro.core.ports.TransacaoRepositoryPort;
@@ -15,8 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/financeiro")
+@RequestMapping("/api/transacoes")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class FinanceiroController {
 
     private final FinanceiroService financeiroService;
@@ -24,6 +26,7 @@ public class FinanceiroController {
 
     @PostMapping("/transacoes")
     public ResponseEntity<TransacaoResponseDTO> criar(@Valid @RequestBody TransacaoRequestDTO request) {
+        // Em Records, acessamos como descricao(), valor(), etc. (sem o prefixo 'get')
         Transacao transacao = Transacao.builder()
                 .descricao(request.descricao())
                 .valor(request.valor())
@@ -31,6 +34,7 @@ public class FinanceiroController {
                 .tipo(request.tipo())
                 .categoria(request.categoria())
                 .observacao(request.observacao())
+                .usuarioId(request.usuarioId()) 
                 .build();
         
         Transacao salva = repository.salvar(transacao);
@@ -51,6 +55,11 @@ public class FinanceiroController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
+
+    @GetMapping("/resumo")
+    public ResponseEntity<ResumoResponseDTO> getResumo() {
+    return ResponseEntity.ok(financeiroService.calcularResumoMensal());
+}
 
     private TransacaoResponseDTO toResponse(Transacao t) {
         return new TransacaoResponseDTO(
