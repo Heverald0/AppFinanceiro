@@ -26,5 +26,8 @@ public record TransacaoRequestDTO(
     Categoria categoria,
 
     @Size(max = 255)
-    String observacao
+    String observacao,
+
+    @NotNull(message = "O ID do usuário é obrigatório")
+    Long usuarioId
 ) {}

@@ -2,6 +2,7 @@ package com.heveraldo.controle_financeiro.adapters.out;
 
 import com.heveraldo.controle_financeiro.core.model.Categoria;
 import com.heveraldo.controle_financeiro.core.model.Transacao;
+import com.heveraldo.controle_financeiro.core.model.TipoTransacao; // Import necessário
 import com.heveraldo.controle_financeiro.core.ports.TransacaoRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
 
-    // Nome alterado para bater com seu print (image_a795ca.png)
     private final SpringDataTransacaoRepository jpaRepository;
 
     @Override
@@ -39,7 +39,6 @@ public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
 
     @Override
     public void deletar(Long id) {
-        // Aciona o Soft Delete configurado na Entity
         jpaRepository.deleteById(id);
     }
 
@@ -49,8 +48,9 @@ public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
                 .descricao(transacao.getDescricao())
                 .valor(transacao.getValor())
                 .data(transacao.getData())
-                .tipo(transacao.getTipo())
-                .categoria(transacao.getCategoria())
+                // Converte Enum do Core para String da Entity (Banco)
+                .tipo(transacao.getTipo() != null ? transacao.getTipo().name() : null)
+                .categoria(transacao.getCategoria() != null ? transacao.getCategoria().name() : null)
                 .observacao(transacao.getObservacao()) 
                 .build();
     }
@@ -61,8 +61,8 @@ public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
                 .descricao(entity.getDescricao())
                 .valor(entity.getValor())
                 .data(entity.getData())
-                .tipo(entity.getTipo())
-                .categoria(entity.getCategoria())
+                .tipo(entity.getTipo() != null ? TipoTransacao.valueOf(entity.getTipo()) : null)
+                .categoria(entity.getCategoria() != null ? Categoria.valueOf(entity.getCategoria()) : null)
                 .observacao(entity.getObservacao())
                 .build();
     }
