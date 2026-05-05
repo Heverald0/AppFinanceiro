@@ -9,16 +9,20 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.sql.SQLException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Ocorreu um erro interno no servidor.");
-        body.put("details", ex.getMessage());
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ErroResposta> handleDatabaseError(SQLException ex) {
+        ErroResposta erro = new ErroResposta("Erro de conexão com o banco de dados. Verifique sua senha.", 500);
+        return ResponseEntity.status(500).body(erro);
+    }
 
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroResposta> handleGeneralError(Exception ex) {
+        ErroResposta erro = new ErroResposta("Ocorreu um erro inesperado: " + ex.getMessage(), 500);
+        return ResponseEntity.status(500).body(erro);
     }
 }
