@@ -20,6 +20,7 @@ public class TransacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "usuario_id")
     private Long usuarioId;
 
     private String descricao;
@@ -34,8 +35,4 @@ public class TransacaoEntity {
 
     @Column(columnDefinition = "BIT(1) DEFAULT 0")
     private boolean deletado;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private UsuarioEntity usuario;
 }

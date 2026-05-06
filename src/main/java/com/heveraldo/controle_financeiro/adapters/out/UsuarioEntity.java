@@ -28,11 +28,8 @@ public class UsuarioEntity {
     private String email;
 
     @Column(nullable = false)
-    @JsonIgnore // Impede que a senha seja enviada em qualquer resposta JSON para o React
-    @ToString.Exclude // Impede que a senha apareça em logs de erro ou de sistema
+    @JsonIgnore
+    @ToString.Exclude 
     private String senha;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @ToString.Exclude // Evita recursividade infinita no log (Usuario -> Transacao -> Usuario)
-    private List<TransacaoEntity> transacoes;
 }
