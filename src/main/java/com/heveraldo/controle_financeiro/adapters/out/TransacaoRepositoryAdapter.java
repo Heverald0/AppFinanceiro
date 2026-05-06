@@ -2,7 +2,8 @@ package com.heveraldo.controle_financeiro.adapters.out;
 
 import com.heveraldo.controle_financeiro.core.model.Categoria;
 import com.heveraldo.controle_financeiro.core.model.Transacao;
-import com.heveraldo.controle_financeiro.core.model.TipoTransacao; // Import necessário
+import com.heveraldo.controle_financeiro.core.model.TipoTransacao;
+import com.heveraldo.controle_financeiro.adapters.out.mapper.TransacaoMapper;
 import com.heveraldo.controle_financeiro.core.ports.TransacaoRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
 
     private final SpringDataTransacaoRepository jpaRepository;
+    private final TransacaoMapper mapper;
 
     @Override
     public Transacao salvar(Transacao transacao) {
@@ -36,6 +38,15 @@ public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Transacao> findByUsuarioId(Long usuarioId) {
+    // Aqui você usa o seu JpaRepository (aquele que estende JpaRepository<TransacaoEntity, Long>)
+        return jpaRepository.findByUsuarioId(usuarioId)
+            .stream()
+            .map(mapper::toDomain) // Converte de Entity para o seu Model de domínio
+            .toList();
+}
 
     @Override
     public void deletar(Long id) {

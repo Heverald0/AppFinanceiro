@@ -20,6 +20,8 @@ public class TransacaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long usuarioId;
+
     private String descricao;
     private BigDecimal valor;
     private LocalDate data;
@@ -27,10 +29,12 @@ public class TransacaoEntity {
     private String tipo;
     private String observacao;
 
+    public Long getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+
     @Column(columnDefinition = "BIT(1) DEFAULT 0")
     private boolean deletado;
 
-    // Vínculo com o usuário (Chave Estrangeira usuario_id)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario;

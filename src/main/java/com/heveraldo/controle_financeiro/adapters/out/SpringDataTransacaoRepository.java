@@ -7,6 +7,8 @@ import com.heveraldo.controle_financeiro.core.model.Categoria;
 import java.util.List;
 
 public interface SpringDataTransacaoRepository extends JpaRepository<TransacaoEntity, Long> {
+
+    List<TransacaoEntity> findByUsuarioId(Long usuarioId);
     
     @Query("SELECT t FROM TransacaoEntity t WHERE t.categoria = :categoria AND YEAR(t.data) = :ano")
     List<TransacaoEntity> buscarReceitasPorCategoriaEAno(
