@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 public class FinanceiroService implements FinanceiroServicePort {
 
     private final TransacaoRepositoryPort repositoryPort;
-
-    // --- Métodos exigidos pela Interface FinanceiroServicePort ---
+    private final TransacaoRepositoryPort transacaoRepository;
 
     @Override
     public Transacao salvarTransacao(Transacao transacao) {
@@ -36,6 +35,12 @@ public class FinanceiroService implements FinanceiroServicePort {
     public void excluirTransacao(Long id) {
         repositoryPort.deletar(id);
     }
+
+    @Override
+    public List<Transacao> buscarPorUsuario(Long usuarioId) {
+    // Aqui você chama o seu repositório de transações passando o ID do usuário
+        return transacaoRepository.findByUsuarioId(usuarioId);
+}
 
     @Override
     public ResumoResponseDTO calcularResumoMensal() {

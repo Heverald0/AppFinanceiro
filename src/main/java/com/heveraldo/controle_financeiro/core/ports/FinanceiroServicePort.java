@@ -11,4 +11,5 @@ public interface FinanceiroServicePort {
     Transacao salvarTransacao(Transacao transacao);
     BigDecimal preverDecimoTerceiro(int mesesTrabalhados);
     ResumoResponseDTO calcularResumoMensal();
+    List<Transacao> buscarPorUsuario(Long usuarioId);
 }

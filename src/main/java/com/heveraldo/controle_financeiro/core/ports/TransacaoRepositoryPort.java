@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface TransacaoRepositoryPort {
     Transacao salvar(Transacao transacao);
+    List<Transacao> findByUsuarioId(Long usuarioId);
     List<Transacao> buscarTodas();
     List<Transacao> buscarReceitasPorCategoriaEAno(Categoria categoria, int ano);
     void deletar(Long id);
